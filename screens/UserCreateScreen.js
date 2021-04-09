@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   Button,
   ScrollView,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import firebase from "../database/firebase";
 
 const UserCreate = () => {
   const [state, setState] = useState({
@@ -17,6 +19,23 @@ const UserCreate = () => {
 
   const handleChangeText = (name, value) => {
     setState({ ...state, [name]: value });
+  };
+
+  const saveNewUser = async () => {
+    if (state.name === "") {
+      Alert.alert("Please provide a name");
+    } else {
+      try {
+        await firebase.db.collection("users").add({
+          name: state.name,
+          email: state.email,
+          phone: state.phone,
+        });
+        props.navigation.navigate("UserList");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -40,7 +59,7 @@ const UserCreate = () => {
         />
       </View>
       <View>
-        <Button title="Save User" onPress={() => console.log(state)} />
+        <Button title="Save User" onPress={saveNewUser} />
       </View>
     </ScrollView>
   );
