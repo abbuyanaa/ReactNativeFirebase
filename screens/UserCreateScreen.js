@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import firebase from "../database/firebase";
 
-const UserCreate = () => {
+const UserCreate = ({ navigation }) => {
   const [state, setState] = useState({
     name: "",
     email: "",
@@ -31,7 +31,7 @@ const UserCreate = () => {
           email: state.email,
           phone: state.phone,
         });
-        props.navigation.navigate("UserList");
+        navigation.goBack();
       } catch (error) {
         console.log(error);
       }
